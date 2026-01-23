@@ -1,4 +1,4 @@
-# CssInline
+# CSSInline
 
 High-performance CSS inlining for HTML documents using a Rust NIF.
 
@@ -42,11 +42,11 @@ html = """
 </html>
 """
 
-{:ok, inlined} = CssInline.inline(html)
+{:ok, inlined} = CSSInline.inline(html)
 # => {:ok, "<html><head></head><body><p style=\"color:red;font-weight:bold\">..."}
 
 # Or use the bang version that raises on error
-inlined = CssInline.inline!(html)
+inlined = CSSInline.inline!(html)
 ```
 
 ## Precompiled Binaries

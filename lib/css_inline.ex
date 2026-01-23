@@ -1,4 +1,4 @@
-defmodule CssInline do
+defmodule CSSInline do
   @moduledoc """
   High-performance CSS inlining for HTML documents.
 
@@ -17,7 +17,7 @@ defmodule CssInline do
       ...>   <body><p>Hello</p></body>
       ...> </html>
       ...> \"\"\"
-      iex> {:ok, result} = CssInline.inline(html)
+      iex> {:ok, result} = CSSInline.inline(html)
       iex> result =~ "color"
       true
 
@@ -35,7 +35,7 @@ defmodule CssInline do
   """
   @spec inline(String.t()) :: {:ok, String.t()} | {:error, term()}
   def inline(html) when is_binary(html) do
-    case CssInline.Native.inline_css(html) do
+    case CSSInline.Native.inline_css(html) do
       result when is_binary(result) or is_list(result) ->
         {:ok, IO.iodata_to_binary(result)}
 

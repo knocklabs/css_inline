@@ -1,4 +1,4 @@
-defmodule CssInline.MixProject do
+defmodule CSSInline.MixProject do
   use Mix.Project
 
   @version "0.1.0"

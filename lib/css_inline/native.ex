@@ -1,4 +1,4 @@
-defmodule CssInline.Native do
+defmodule CSSInline.Native do
   @moduledoc false
 
   version = Mix.Project.config()[:version]

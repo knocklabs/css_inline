@@ -1,4 +1,4 @@
-defmodule CssInlineTest do
+defmodule CSSInlineTest do
   use ExUnit.Case, async: true
 
   describe "inline/1" do
@@ -12,18 +12,18 @@ defmodule CssInlineTest do
       </html>
       """
 
-      assert {:ok, result} = CssInline.inline(html)
+      assert {:ok, result} = CSSInline.inline(html)
       assert result =~ ~r/<p[^>]*style="[^"]*color: ?red/
     end
 
     test "handles empty HTML" do
-      assert {:ok, result} = CssInline.inline("")
+      assert {:ok, result} = CSSInline.inline("")
       assert is_binary(result)
     end
 
     test "handles HTML without styles" do
       html = "<html><body><p>Hello</p></body></html>"
-      assert {:ok, result} = CssInline.inline(html)
+      assert {:ok, result} = CSSInline.inline(html)
       assert result =~ "Hello"
     end
 
@@ -43,7 +43,7 @@ defmodule CssInlineTest do
       </html>
       """
 
-      assert {:ok, result} = CssInline.inline(html)
+      assert {:ok, result} = CSSInline.inline(html)
       assert result =~ ~r/font-weight: ?bold/
       assert result =~ ~r/margin: ?10px/
     end
@@ -60,7 +60,7 @@ defmodule CssInlineTest do
       </html>
       """
 
-      assert {:error, _reason} = CssInline.inline(html)
+      assert {:error, _reason} = CSSInline.inline(html)
     end
 
     test "minifies CSS output" do
@@ -78,7 +78,7 @@ defmodule CssInlineTest do
       </html>
       """
 
-      assert {:ok, result} = CssInline.inline(html)
+      assert {:ok, result} = CSSInline.inline(html)
       # CSS should be minified (no extra whitespace)
       assert result =~ "color:red" or result =~ "color: red"
     end
@@ -95,7 +95,7 @@ defmodule CssInlineTest do
       </html>
       """
 
-      result = CssInline.inline!(html)
+      result = CSSInline.inline!(html)
       assert result =~ ~r/<p[^>]*style="[^"]*color: ?blue/
     end
 
@@ -112,7 +112,7 @@ defmodule CssInlineTest do
       """
 
       assert_raise RuntimeError, ~r/CSS inlining failed/, fn ->
-        CssInline.inline!(html)
+        CSSInline.inline!(html)
       end
     end
   end

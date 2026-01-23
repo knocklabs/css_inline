@@ -33,4 +33,4 @@ fn inline_css(html: &str) -> Result<Vec<u8>, RustlerError> {
     Ok(buffer)
 }
 
-rustler::init!("Elixir.CssInline.Native");
+rustler::init!("Elixir.CSSInline.Native");
