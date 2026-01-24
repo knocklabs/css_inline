@@ -80,6 +80,43 @@ Additional performance optimizations include:
 - **Buffer pre-allocation**: Pre-allocates 1.5x the input size for typical cases
 - **CSS minification**: Output CSS is automatically minified
 
+## Releasing (Maintainers)
+
+Releasing a new version involves building precompiled NIFs and generating a checksum file. Follow these steps:
+
+1. **Update the version** in `mix.exs` and create a PR to merge to `main`
+
+2. **Create and push a tag** to trigger the build workflow:
+   ```bash
+   git checkout main
+   git pull origin main
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
+   ```
+
+3. **Wait for GitHub Actions to complete** - the "Build precompiled NIFs" workflow will compile binaries for all targets and upload them to the GitHub release
+
+4. **Generate the checksum file** locally:
+   ```bash
+   mix deps.get
+   CSS_INLINE_BUILD=true mix rustler_precompiled.download CSSInline.Native --all --print
+   ```
+
+5. **Create a PR** with the generated `checksum-Elixir.CSSInline.Native.exs` file and merge to `main`
+
+6. **Update the tag** to include the checksum commit:
+   ```bash
+   git checkout main
+   git pull origin main
+   git tag -f vX.Y.Z
+   git push origin vX.Y.Z --force
+   ```
+
+Consumers can now use the release by pinning to the tag:
+```elixir
+{:css_inline, github: "knocklabs/css_inline", tag: "vX.Y.Z"}
+```
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.

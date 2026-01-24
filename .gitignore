@@ -27,6 +27,3 @@ css_inline-*.tar
 
 # Precompiled NIF binaries (downloaded at compile time)
 /priv/native/
-
-# Checksum file is generated during release
-/checksum-*.exs
