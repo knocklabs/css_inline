@@ -39,10 +39,6 @@ jobs:
         with:
           targets: ${{ matrix.job.target }}
 
-      - name: Set RUSTFLAGS for musl targets
-        if: contains(matrix.job.target, 'musl')
-        run: echo "RUSTFLAGS=-C target-feature=-crt-static" >> $GITHUB_ENV
-
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.1.4
