@@ -65,12 +65,26 @@ jobs:
           name: ${{ steps.build-crate.outputs.file-name }}
           path: ${{ steps.build-crate.outputs.file-path }}
 
-      - name: Publish archives and packages
+  publish:
+    name: Publish GitHub Release
+    needs: build_release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: List artifacts
+        run: ls -la artifacts/
+
+      - name: Publish to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ inputs.version }}
           name: v${{ inputs.version }}
           draft: false
-          files: |
-            ${{ steps.build-crate.outputs.file-path }}
+          files: artifacts/*.tar.gz
         
