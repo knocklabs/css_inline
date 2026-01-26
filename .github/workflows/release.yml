@@ -1,10 +1,15 @@
 name: Build precompiled NIFs
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.1.0) - must match mix.exs'
+        required: true
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
   build_release:
@@ -28,11 +33,15 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v5
 
-      - name: Extract project version
+      - name: Validate version matches mix.exs
         shell: bash
         run: |
-          # Get the project version from mix.exs
-          echo "PROJECT_VERSION=$(sed -n 's/^  @version "\(.*\)"/\1/p' mix.exs | head -n1)" >> $GITHUB_ENV
+          MIX_VERSION=$(sed -n 's/^  @version "\(.*\)"/\1/p' mix.exs | head -n1)
+          if [ "$MIX_VERSION" != "${{ inputs.version }}" ]; then
+            echo "Error: Input version (${{ inputs.version }}) does not match mix.exs version ($MIX_VERSION)"
+            exit 1
+          fi
+          echo "PROJECT_VERSION=${{ inputs.version }}" >> $GITHUB_ENV
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@1.93.0
@@ -59,7 +68,9 @@ jobs:
       - name: Publish archives and packages
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ inputs.version }}
+          name: v${{ inputs.version }}
+          draft: false
           files: |
             ${{ steps.build-crate.outputs.file-path }}
-        if: startsWith(github.ref, 'refs/tags/')
         

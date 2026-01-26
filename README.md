@@ -86,15 +86,12 @@ Releasing a new version involves building precompiled NIFs and generating a chec
 
 1. **Update the version** in `mix.exs` and create a PR to merge to `main`
 
-2. **Create and push a tag** to trigger the build workflow:
-   ```bash
-   git checkout main
-   git pull origin main
-   git tag vX.Y.Z
-   git push origin vX.Y.Z
-   ```
+2. **Manually trigger the build workflow**:
+   - Go to Actions → "Build precompiled NIFs" → "Run workflow"
+   - Enter the version (e.g., `0.1.0`) - must match `mix.exs`
+   - This builds all binaries and uploads them to a GitHub release
 
-3. **Wait for GitHub Actions to complete** - the "Build precompiled NIFs" workflow will compile binaries for all targets and upload them to the GitHub release
+3. **Wait for all builds to complete** - all targets must succeed before proceeding
 
 4. **Generate the checksum file** locally:
    ```bash
@@ -104,13 +101,15 @@ Releasing a new version involves building precompiled NIFs and generating a chec
 
 5. **Create a PR** with the generated `checksum-Elixir.CSSInline.Native.exs` file and merge to `main`
 
-6. **Update the tag** to include the checksum commit:
+6. **Create the tag** pointing to the commit with the checksum:
    ```bash
    git checkout main
    git pull origin main
-   git tag -f vX.Y.Z
-   git push origin vX.Y.Z --force
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
    ```
+
+> **Important**: The workflow is manually triggered (not on tag push) to prevent rebuilds when updating the tag. This ensures the checksum file matches the released artifacts.
 
 Consumers can now use the release by pinning to the tag:
 ```elixir
