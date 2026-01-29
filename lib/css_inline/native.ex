@@ -20,5 +20,5 @@ defmodule CSSInline.Native do
 
   # NIF function - will be replaced at runtime by the Rust implementation.
   # This stub is only used if the NIF fails to load.
-  def inline_css(_html), do: :erlang.nif_error(:nif_not_loaded)
+  def inline_css(_html, _opts), do: :erlang.nif_error(:nif_not_loaded)
 end
