@@ -239,4 +239,11 @@ defmodule CSSInlineTest do
       end
     end
   end
+
+  describe "regression tests" do
+    test "returns error for deeply nested HTML" do
+      html = File.read!("test/fixtures/deeply_nested.html")
+      assert {:error, :nesting_depth_exceeded} = CSSInline.inline(html)
+    end
+  end
 end
