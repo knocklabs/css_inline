@@ -53,6 +53,7 @@ struct Options {
     keep_link_tags: bool,
     load_remote_stylesheets: bool,
     minify_css: bool,
+    max_depth: usize,
 }
 
 /// Inlines CSS from `<style>` tags into element `style` attributes.
@@ -76,7 +77,12 @@ struct Options {
 ///   since BEAM-managed data must live on the BEAM heap.
 #[rustler::nif(schedule = "DirtyCpu")]
 fn inline_css(html: &str, opts: Options) -> Result<Vec<u8>, RustlerError> {
-    if exceeds_nesting_depth(html.as_bytes(), MAX_NESTING_DEPTH) {
+    let max_depth = if opts.max_depth > 0 {
+        opts.max_depth
+    } else {
+        MAX_NESTING_DEPTH
+    };
+    if exceeds_nesting_depth(html.as_bytes(), max_depth) {
         return Err(RustlerError::Term(
             Box::new(atoms::nesting_depth_exceeded()),
         ));
