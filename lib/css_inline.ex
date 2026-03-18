@@ -32,7 +32,7 @@ defmodule CSSInline do
       Defaults to `true`. Set to `false` to skip external stylesheets.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
     * `:max_depth` - Maximum allowed HTML nesting depth. Documents exceeding this return
-      `{:error, :nesting_depth_exceeded}`. Defaults to `128`.
+      `{:error, :nesting_depth_exceeded}`. Set to `0` to disable depth checking. Defaults to `128`.
 
   ## Performance
 
@@ -58,7 +58,7 @@ defmodule CSSInline do
             keep_link_tags: boolean(),
             load_remote_stylesheets: boolean(),
             minify_css: boolean(),
-            max_depth: pos_integer()
+            max_depth: non_neg_integer()
           }
   end
 
@@ -68,7 +68,7 @@ defmodule CSSInline do
           | {:keep_link_tags, boolean()}
           | {:load_remote_stylesheets, boolean()}
           | {:minify_css, boolean()}
-          | {:max_depth, pos_integer()}
+          | {:max_depth, non_neg_integer()}
 
   @doc """
   Inlines CSS from `<style>` tags into element `style` attributes.
@@ -82,7 +82,7 @@ defmodule CSSInline do
     * `:keep_link_tags` - Whether to keep `<link>` tags after processing. Defaults to `false`.
     * `:load_remote_stylesheets` - Whether to load remote stylesheets. Defaults to `true`.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
-    * `:max_depth` - Maximum allowed HTML nesting depth. Defaults to `128`.
+    * `:max_depth` - Maximum allowed HTML nesting depth. Set to `0` to disable. Defaults to `128`.
   """
   @spec inline(String.t(), [option()]) :: {:ok, String.t()} | {:error, term()}
   def inline(html, opts \\ []) when is_binary(html) and is_list(opts) do
@@ -111,7 +111,7 @@ defmodule CSSInline do
     * `:keep_link_tags` - Whether to keep `<link>` tags after processing. Defaults to `false`.
     * `:load_remote_stylesheets` - Whether to load remote stylesheets. Defaults to `true`.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
-    * `:max_depth` - Maximum allowed HTML nesting depth. Defaults to `128`.
+    * `:max_depth` - Maximum allowed HTML nesting depth. Set to `0` to disable. Defaults to `128`.
   """
   @spec inline!(String.t(), [option()]) :: String.t()
   def inline!(html, opts \\ []) when is_binary(html) and is_list(opts) do
