@@ -31,6 +31,9 @@ defmodule CSSInline do
     * `:load_remote_stylesheets` - Whether to load remote stylesheets referenced in `<link>` tags.
       Defaults to `true`. Set to `false` to skip external stylesheets.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
+    * `:check_depth` - Whether to check HTML nesting depth before inlining. Defaults to `true`.
+    * `:max_depth` - Maximum allowed HTML nesting depth. Documents exceeding this return
+      `{:error, :nesting_depth_exceeded}`. Only applies when `:check_depth` is `true`. Defaults to `128`.
 
   ## Performance
 
@@ -47,14 +50,18 @@ defmodule CSSInline do
               keep_style_tags: false,
               keep_link_tags: false,
               load_remote_stylesheets: true,
-              minify_css: true
+              minify_css: true,
+              check_depth: true,
+              max_depth: 128
 
     @type t :: %__MODULE__{
             inline_style_tags: boolean(),
             keep_style_tags: boolean(),
             keep_link_tags: boolean(),
             load_remote_stylesheets: boolean(),
-            minify_css: boolean()
+            minify_css: boolean(),
+            check_depth: boolean(),
+            max_depth: pos_integer()
           }
   end
 
@@ -64,6 +71,8 @@ defmodule CSSInline do
           | {:keep_link_tags, boolean()}
           | {:load_remote_stylesheets, boolean()}
           | {:minify_css, boolean()}
+          | {:check_depth, boolean()}
+          | {:max_depth, pos_integer()}
 
   @doc """
   Inlines CSS from `<style>` tags into element `style` attributes.
@@ -77,6 +86,8 @@ defmodule CSSInline do
     * `:keep_link_tags` - Whether to keep `<link>` tags after processing. Defaults to `false`.
     * `:load_remote_stylesheets` - Whether to load remote stylesheets. Defaults to `true`.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
+    * `:check_depth` - Whether to check HTML nesting depth before inlining. Defaults to `true`.
+    * `:max_depth` - Maximum allowed HTML nesting depth. Defaults to `128`.
   """
   @spec inline(String.t(), [option()]) :: {:ok, String.t()} | {:error, term()}
   def inline(html, opts \\ []) when is_binary(html) and is_list(opts) do
@@ -105,6 +116,8 @@ defmodule CSSInline do
     * `:keep_link_tags` - Whether to keep `<link>` tags after processing. Defaults to `false`.
     * `:load_remote_stylesheets` - Whether to load remote stylesheets. Defaults to `true`.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
+    * `:check_depth` - Whether to check HTML nesting depth before inlining. Defaults to `true`.
+    * `:max_depth` - Maximum allowed HTML nesting depth. Defaults to `128`.
   """
   @spec inline!(String.t(), [option()]) :: String.t()
   def inline!(html, opts \\ []) when is_binary(html) and is_list(opts) do

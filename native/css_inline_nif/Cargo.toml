@@ -1,6 +1,6 @@
 [package]
 name = "css_inline_nif"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 authors = ["Knock Labs"]
 publish = false
@@ -17,4 +17,4 @@ nif_version_2_17 = ["rustler/nif_version_2_17"]
 
 [dependencies]
 rustler = "0.37"
-css-inline = "0.19.1"
+css-inline = "0.20.0"
