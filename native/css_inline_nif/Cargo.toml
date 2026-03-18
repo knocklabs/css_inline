@@ -17,4 +17,4 @@ nif_version_2_17 = ["rustler/nif_version_2_17"]
 
 [dependencies]
 rustler = "0.37"
-css-inline = "0.19.1"
+css-inline = "0.20.0"

@@ -77,9 +77,9 @@ struct Options {
 #[rustler::nif(schedule = "DirtyCpu")]
 fn inline_css(html: &str, opts: Options) -> Result<Vec<u8>, RustlerError> {
     if exceeds_nesting_depth(html.as_bytes(), MAX_NESTING_DEPTH) {
-        return Err(RustlerError::Term(Box::new(
-            atoms::nesting_depth_exceeded(),
-        )));
+        return Err(RustlerError::Term(
+            Box::new(atoms::nesting_depth_exceeded()),
+        ));
     }
 
     let estimated_size = (html.len() as f64 * 1.5) as usize;
