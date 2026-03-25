@@ -240,6 +240,80 @@ defmodule CSSInlineTest do
     end
   end
 
+  describe "!important handling" do
+    @email_html """
+    <html>
+      <head>
+        <style>
+          a[x-apple-data-detectors],
+          u + #body a {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+          }
+          .button a {
+            color: #ffffff !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+          }
+        </style>
+      </head>
+      <body id="body">
+        <u>
+          <div class="button">
+            <a href="https://example.com">Click Me</a>
+          </div>
+        </u>
+      </body>
+    </html>
+    """
+
+    test "preserves !important when inlining styles" do
+      assert {:ok, result} = CSSInline.inline(@email_html)
+      assert result =~ ~r/style="[^"]*!important/
+    end
+
+    @production_opts [
+      load_remote_stylesheets: false,
+      keep_link_tags: true,
+      keep_style_tags: true
+    ]
+
+    test "production settings: inlined selectors remain in <style> without remove_inlined_selectors" do
+      assert {:ok, result} = CSSInline.inline(@email_html, @production_opts)
+
+      assert result =~ ~r/style="[^"]*!important/,
+             "Inlined styles should preserve !important"
+
+      [_, style_content] = Regex.run(~r/<style[^>]*>(.*?)<\/style>/s, result)
+
+      assert style_content =~ "u + #body a",
+             "Non-inlinable selectors should remain in <style> tag"
+
+      assert style_content =~ ".button a",
+             "Without remove_inlined_selectors, inlined selectors remain in <style>"
+    end
+
+    test "production settings + remove_inlined_selectors strips inlined rules from <style>" do
+      {:ok, result} =
+        CSSInline.inline(@email_html, [remove_inlined_selectors: true] ++ @production_opts)
+
+      assert result =~ ~r/style="[^"]*color:[^"]*!important/,
+             "Inlined styles should preserve !important"
+
+      [_, style_content] = Regex.run(~r/<style[^>]*>(.*?)<\/style>/s, result)
+
+      assert style_content =~ "u + #body a",
+             "Non-inlinable selectors (complex email client overrides) must remain"
+
+      refute style_content =~ ".button a",
+             "Inlined selectors should be removed from <style> to prevent conflicts"
+    end
+  end
+
   describe "regression tests" do
     test "returns error for deeply nested HTML" do
       html = File.read!("test/fixtures/deeply_nested.html")
