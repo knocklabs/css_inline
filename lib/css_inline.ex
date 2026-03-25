@@ -31,6 +31,10 @@ defmodule CSSInline do
     * `:load_remote_stylesheets` - Whether to load remote stylesheets referenced in `<link>` tags.
       Defaults to `true`. Set to `false` to skip external stylesheets.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
+    * `:remove_inlined_selectors` - Whether to remove selectors from `<style>` tags after they've
+      been successfully inlined. Useful with `:keep_style_tags` to avoid conflicts between retained
+      `<style>` rules and inlined styles (e.g. `!important` specificity issues in email clients).
+      Defaults to `false`.
     * `:check_depth` - Whether to check HTML nesting depth before inlining. Defaults to `true`.
     * `:max_depth` - Maximum allowed HTML nesting depth. Documents exceeding this return
       `{:error, :nesting_depth_exceeded}`. Only applies when `:check_depth` is `true`. Defaults to `128`.
@@ -51,6 +55,7 @@ defmodule CSSInline do
               keep_link_tags: false,
               load_remote_stylesheets: true,
               minify_css: true,
+              remove_inlined_selectors: false,
               check_depth: true,
               max_depth: 128
 
@@ -60,6 +65,7 @@ defmodule CSSInline do
             keep_link_tags: boolean(),
             load_remote_stylesheets: boolean(),
             minify_css: boolean(),
+            remove_inlined_selectors: boolean(),
             check_depth: boolean(),
             max_depth: pos_integer()
           }
@@ -71,6 +77,7 @@ defmodule CSSInline do
           | {:keep_link_tags, boolean()}
           | {:load_remote_stylesheets, boolean()}
           | {:minify_css, boolean()}
+          | {:remove_inlined_selectors, boolean()}
           | {:check_depth, boolean()}
           | {:max_depth, pos_integer()}
 
@@ -86,6 +93,8 @@ defmodule CSSInline do
     * `:keep_link_tags` - Whether to keep `<link>` tags after processing. Defaults to `false`.
     * `:load_remote_stylesheets` - Whether to load remote stylesheets. Defaults to `true`.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
+    * `:remove_inlined_selectors` - Whether to remove selectors from `<style>` tags after they've
+      been successfully inlined. Defaults to `false`.
     * `:check_depth` - Whether to check HTML nesting depth before inlining. Defaults to `true`.
     * `:max_depth` - Maximum allowed HTML nesting depth. Defaults to `128`.
   """
@@ -116,6 +125,8 @@ defmodule CSSInline do
     * `:keep_link_tags` - Whether to keep `<link>` tags after processing. Defaults to `false`.
     * `:load_remote_stylesheets` - Whether to load remote stylesheets. Defaults to `true`.
     * `:minify_css` - Whether to minify the inlined CSS. Defaults to `true`.
+    * `:remove_inlined_selectors` - Whether to remove selectors from `<style>` tags after they've
+      been successfully inlined. Defaults to `false`.
     * `:check_depth` - Whether to check HTML nesting depth before inlining. Defaults to `true`.
     * `:max_depth` - Maximum allowed HTML nesting depth. Defaults to `128`.
   """

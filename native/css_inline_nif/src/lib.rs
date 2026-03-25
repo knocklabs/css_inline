@@ -53,6 +53,7 @@ struct Options {
     keep_link_tags: bool,
     load_remote_stylesheets: bool,
     minify_css: bool,
+    remove_inlined_selectors: bool,
     check_depth: bool,
     max_depth: usize,
 }
@@ -97,6 +98,7 @@ fn inline_css(html: &str, opts: Options) -> Result<Vec<u8>, RustlerError> {
         .keep_link_tags(opts.keep_link_tags)
         .load_remote_stylesheets(opts.load_remote_stylesheets)
         .minify_css(opts.minify_css)
+        .remove_inlined_selectors(opts.remove_inlined_selectors)
         .build();
 
     inliner
