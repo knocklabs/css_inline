@@ -17,4 +17,4 @@ nif_version_2_17 = ["rustler/nif_version_2_17"]
 
 [dependencies]
 rustler = "0.37"
-css-inline = "0.20.1"
+css-inline = { git = "https://github.com/knocklabs/css-inline", rev = "5c22550a5427e87ec525fbec757457c0baa29bf3" }
