@@ -279,6 +279,54 @@ defmodule CSSInlineTest do
     end
   end
 
+  describe ":has() selectors" do
+    test "inlines rules onto the elements they match" do
+      html = """
+      <html>
+        <head>
+          <style>
+            td { color: blue; }
+            td:has(> table > tbody > tr > td p:first-child) { color: red; }
+          </style>
+        </head>
+        <body>
+          <table>
+            <tr>
+              <td id="match">
+                <table>
+                  <tr>
+                    <td>
+                      <p>First</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <table>
+            <tr>
+              <td id="no-match">
+                <table>
+                  <tr>
+                    <td>
+                      <span>x</span>
+                      <p>Not first</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>
+      """
+
+      assert {:ok, result} = CSSInline.inline(html, keep_style_tags: true)
+      assert result =~ ~s(<td id="match" style="color:red">)
+      assert result =~ ~s(<td id="no-match" style="color:blue">)
+    end
+  end
+
   describe "regression tests" do
     test "returns error for deeply nested HTML" do
       html = File.read!("test/fixtures/deeply_nested.html")
