@@ -290,8 +290,33 @@ defmodule CSSInlineTest do
           </style>
         </head>
         <body>
-          <table><tr><td id="match"><table><tr><td><p>First</p></td></tr></table></td></tr></table>
-          <table><tr><td id="no-match"><table><tr><td><span>x</span><p>Not first</p></td></tr></table></td></tr></table>
+          <table>
+            <tr>
+              <td id="match">
+                <table>
+                  <tr>
+                    <td>
+                      <p>First</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <table>
+            <tr>
+              <td id="no-match">
+                <table>
+                  <tr>
+                    <td>
+                      <span>x</span>
+                      <p>Not first</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
         </body>
       </html>
       """

@@ -83,7 +83,7 @@ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 [[package]]
 name = "css-inline"
 version = "0.23.1"
-source = "git+https://github.com/knocklabs/css-inline?rev=5c22550a5427e87ec525fbec757457c0baa29bf3#5c22550a5427e87ec525fbec757457c0baa29bf3"
+source = "git+https://github.com/knocklabs/css-inline?rev=f42065e205aa4abcd3241b75338a4c5455f093b4#f42065e205aa4abcd3241b75338a4c5455f093b4"
 dependencies = [
  "cssparser",
  "hashbrown",
